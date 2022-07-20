@@ -1,32 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, Observer, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-subject',
   templateUrl: './subject.component.html',
   styleUrls: ['./subject.component.scss'],
 })
-
 export class SubjectComponent implements OnInit {
-  obs: Observable<number>;
-  incrementer = 1;
-  setIntervalId: any;
-  subscription: Subscription;
-  //number: number = 1;
-
   ngOnInit(): void {
-    this.obs = new Observable((observer: Observer<number>) => {
-      this.setIntervalId = setInterval(() => {
-        observer.next(this.incrementer++);
-      }, 1000);
+    const subject = new Subject<number>();
+
+    subject.subscribe({
+      next: (value) => console.log('sub1:', value),
     });
-    
-    this.subscription = this.obs.subscribe((resposnse) => {
-      console.log(resposnse);
+    subject.subscribe({
+      next: (value) => console.log('sub2:', value),
     });
-  }
-  test(): void {
-    this.subscription.unsubscribe();
-    clearInterval(this.setIntervalId);
+    console.log('Subject');
+    subject.next(1);
+    subject.next(2);
   }
 }
